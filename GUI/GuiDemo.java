@@ -36,7 +36,7 @@ import java.awt.event.WindowEvent;
  *   FlowLayout(流式布局管理器) 
  *     从左到右的顺序排列 
  *     Panel默认的布局管理器 
- *   BorderLayout(辩解布局管理器) 
+ *   BorderLayout(边界布局管理器) 
  *     东  南  西  北   中 
  *     Frame 默认的布局管理器 
  *     不指定布局方式,默认 满屏覆盖,在添加一个 也是 满屏覆盖 
@@ -55,7 +55,7 @@ import java.awt.event.WindowEvent;
  *   
  *  事件源:就是awt包或者swing包中的那些图像界面组件. 
  *  事件:每个事件源都有自己特定的对应时间和共性时间. 
- *  监听器:可以出发某一个事件的动作都已经封装到监听器中. 
+ *  监听器:可以触发某一个事件的动作都已经封装到监听器中. 
  */  
   
   
