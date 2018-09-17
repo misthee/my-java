@@ -1,3 +1,41 @@
+自定义规则格式：
+@Rule(key = "BraceRule")
+@RspecKey("BraceRule")
+public class BraceRule extends IssuableSubscriptionVisitor {
+    @Override
+    public List<Tree.Kind> nodesToVisit() {
+        return ImmutableList.of(Tree.Kind.BLOCK);
+    }
+
+    @Override
+    public void visitNode(Tree tree) {
+        if (tree instanceof BlockTree) {
+            BlockTree blockTree = (BlockTree) tree;
+            if (blockTree.parent() instanceof MethodTree) {
+                //方法中blockTree为空
+                if (blockTree.body().size() == 0) {
+                    //开大括号 { 行号
+                    int openLine = blockTree.openBraceToken().line();
+                    //闭大括号 } 行号
+                    int closeLine = blockTree.closeBraceToken().line();
+                    if (openLine != closeLine)
+                        reportIssue(tree, "空的方法体左大括号右大括号应该在一行");
+                }
+            }
+        }
+    }
+}
+
+
+测试类格式：
+public class BraceTest {
+    @Test
+    public void test() {
+        JavaCheckVerifier.verify("C:\\Users\\zhengyi\\Desktop\\SonarTest\\src\\test\\BraceRule.java", new BraceRule());
+    }
+}
+测试用的类自己编写，后面为判定规则
+
 ArrayDeclarationRule判断数组声明括号的位置是否合理、函数返回数组括号的位置是否合理
 						([ 符号 的行号 小于 数组变量名行号,或者 同一行但是变量名 在 [ 前面)；
 IfElseStatementBlockRule判断if体是否使用大括号包裹、if闭括号是否与else关键字位于同一行、
