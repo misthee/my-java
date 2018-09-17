@@ -1,0 +1,9 @@
+ArrayDeclarationRule判断数组声明括号的位置是否合理、函数返回数组括号的位置是否合理
+						([ 符号 的行号 小于 数组变量名行号,或者 同一行但是变量名 在 [ 前面)；
+IfElseStatementBlockRule判断if体是否使用大括号包裹、if闭括号是否与else关键字位于同一行、
+							else体是否使用大括号包裹(if (elseStatementTree instanceof BlockTree == false))；
+AssertMentRule判断断言中是否有业务处理（方法调用），检查判断条件中是否有方法调用，a.equals(b)也是方法调用；
+AssignmentRule判断是否有复杂的赋值语句（赋值表达式的父级是否还是赋值表达式或变量声明语句），
+					判定边界条件（父级是注解、Block、Lambda表达式），到达边界就不用再判断了；
+BinaryStatementRule判断二元操作表达式是否需要加括号以明确优先级，用 & ^ | 等符号连接的，一定要加括号（混合操作会影响结果），
+						用&& ||连接的，如果二元表达式的操作符不是&& ||的需要加括号；
