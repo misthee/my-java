@@ -1,0 +1,176 @@
+//Tree.kind	枚举类，包含了所有结构体，如COMPILATION_UNIT、CLASS、ENUM、ANNOTATION_TYPE、INITIALIZER等
+
+public interface SyntaxToken extends Tree {		
+
+  String text();	//内容
+
+  List<SyntaxTrivia> trivias();	//注释
+
+  int line();	//行号
+
+  int column();	//列号
+}
+
+public interface IdentifierTree extends ExpressionTree, TypeTree {	//标识符
+
+  SyntaxToken identifierToken();	
+
+  String name();	
+
+  Symbol symbol(); //符号 symbol
+
+}
+
+public interface CompilationUnitTree extends Tree {		//编译单元，一个类
+
+  @Nullable
+  PackageDeclarationTree packageDeclaration();		//包声明
+
+  List<ImportClauseTree> imports();		//导入声明
+
+  List<Tree> types();		//类或者接口
+  
+  SyntaxToken eofToken();	//结束符
+
+}
+
+public interface ClassTree extends StatementTree {		//类结构体
+
+  @Nullable
+  SyntaxToken declarationKeyword();		//声明关键字，Class或者Interface
+
+  @Nullable
+  IdentifierTree simpleName();		//类名
+
+  TypeParameters typeParameters();	//<T>泛型参数
+
+  ModifiersTree modifiers();	//修饰符public等
+
+  @Nullable
+  TypeTree superClass();   //父类类型
+
+  ListTree<TypeTree> superInterfaces();    //接口
+
+  SyntaxToken openBraceToken();		//大括号
+
+  List<Tree> members();		//成员、函数、初始化块
+
+  SyntaxToken closeBraceToken(); 
+
+  Symbol.TypeSymbol symbol();
+}
+
+public class IfStatementTreeImpl extends JavaTree implements IfStatementTree {		//if语句
+
+  private InternalSyntaxToken ifKeyword;	
+  private InternalSyntaxToken openParenToken;	//小括号
+  private ExpressionTree condition;		//判断条件
+  private InternalSyntaxToken closeParenToken;
+  private StatementTree thenStatement;		//if块，包含大括号和内容
+  @Nullable
+  private final InternalSyntaxToken elseKeyword;	//else关键字
+  @Nullable
+  private final StatementTree elseStatement;	//else块
+}
+
+public interface BlockTree extends StatementTree {		//代码块
+
+  SyntaxToken openBraceToken();
+
+  List<StatementTree> body();
+
+  SyntaxToken closeBraceToken();
+
+}
+
+public interface VariableTree extends StatementTree {		//变量声明语句
+
+  ModifiersTree modifiers();		//修饰符
+
+  TypeTree type();		//变量类型
+
+  IdentifierTree simpleName();
+
+  @Nullable
+  SyntaxToken equalToken();
+
+  @Nullable
+  ExpressionTree initializer();		//赋值
+
+  Symbol symbol();		//变量本身，包含owner参数（所属类）、name、type
+
+  @Nullable
+  SyntaxToken endToken();		//结束符
+
+}
+
+public interface AssertStatementTree extends StatementTree {	//assert语句
+
+  SyntaxToken assertKeyword();
+
+  ExpressionTree condition();	//判断条件
+
+  @Nullable
+  SyntaxToken colonToken();		//冒号
+
+  @Nullable
+  ExpressionTree detail();		//执行语句，如果判断条件不满足
+
+  SyntaxToken semicolonToken(); //；
+
+}
+
+public interface MethodInvocationTree extends ExpressionTree {		//方法调用
+
+  /**
+   * @since Java 1.5
+   */
+  @Nullable
+  TypeArguments typeArguments();	//返回值类型，可以为空
+
+  ExpressionTree methodSelect();	//方法名
+
+  Arguments arguments();			//参数
+
+  Symbol symbol();					//
+
+}
+
+public interface AssignmentExpressionTree extends ExpressionTree {		//赋值表达式
+
+  ExpressionTree variable();		//变量
+
+  SyntaxToken operatorToken();		//操作符
+
+  ExpressionTree expression();		//表达式
+
+}
+
+public interface AnnotationTree extends ExpressionTree, ModifierTree {		//注解
+
+  SyntaxToken atToken();		//@符号
+
+  TypeTree annotationType();	//注解类型
+
+  Arguments arguments();		//注解参数
+
+}
+
+public interface ExpressionStatementTree extends StatementTree {		//表达式语句
+
+  ExpressionTree expression();
+
+  SyntaxToken semicolonToken();
+
+}
+
+public interface BinaryExpressionTree extends ExpressionTree {			//二元操作表达式和赋值表达式类似
+
+  ExpressionTree leftOperand();
+
+  SyntaxToken operatorToken();
+
+  ExpressionTree rightOperand();
+
+}
+
