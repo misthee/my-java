@@ -44,7 +44,7 @@ public interface ClassTree extends StatementTree {		//类结构体
 
   TypeParameters typeParameters();	//<T>泛型参数
 
-  ModifiersTree modifiers();	//修饰符public等
+  ModifiersTree modifiers();	//修饰符public等，注解也是modifier
 
   @Nullable
   TypeTree superClass();   //父类类型
@@ -174,3 +174,12 @@ public interface BinaryExpressionTree extends ExpressionTree {			//二元操作�
 
 }
 
+public interface IdentifierTree extends ExpressionTree, TypeTree {		//标识符：类名、方法名、变量名
+
+  SyntaxToken identifierToken();
+
+  String name();		//返回IdentifierToken的text
+
+  Symbol symbol();
+
+}
