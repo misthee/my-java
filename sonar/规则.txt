@@ -36,12 +36,28 @@ public class BraceTest {
 }
 测试用的类自己编写，后面为判定规则
 
+增加新规则后，在resources/org.sonar.l10n.java.rules.squid下增加相应的html和json文件。在RulesList和MyJavaFileCheckRegistar中添加相应条目。
+
 ArrayDeclarationRule判断数组声明括号的位置是否合理、函数返回数组括号的位置是否合理
-						([ 符号 的行号 小于 数组变量名行号,或者 同一行但是变量名 在 [ 前面)；
+		([ 符号 的行号 小于 数组变量名行号,或者 同一行但是变量名 在 [ 前面)；
+						
 IfElseStatementBlockRule判断if体是否使用大括号包裹、if闭括号是否与else关键字位于同一行、
-							else体是否使用大括号包裹(if (elseStatementTree instanceof BlockTree == false))；
+		else体是否使用大括号包裹(if (elseStatementTree instanceof BlockTree == false))；
+			
 AssertMentRule判断断言中是否有业务处理（方法调用），检查判断条件中是否有方法调用，a.equals(b)也是方法调用；
+
 AssignmentRule判断是否有复杂的赋值语句（赋值表达式的父级是否还是赋值表达式或变量声明语句），
-					判定边界条件（父级是注解、Block、Lambda表达式），到达边界就不用再判断了；
+		判定边界条件（父级是注解、Block、Lambda表达式），到达边界就不用再判断了；
+					
 BinaryStatementRule判断二元操作表达式是否需要加括号以明确优先级，用 & ^ | 等符号连接的，一定要加括号（混合操作会影响结果），
-						用&& ||连接的，如果二元表达式的操作符不是&& ||的需要加括号；
+		用&& ||连接的，如果二元表达式的操作符不是&& ||的需要加括号；
+						
+BraceRule大括号规则，方法体为空，大括号不换行。判断block的父级是否是方法，再判断block的body是否为空；
+
+ClassCommentRule类和接口的注释，使用javadoc风格。关注类、注解类型、接口、枚举类等ClassTree结构。
+		找到第一个token，递归查找它的父级，看是否在方法内，直到找到MethodTree类型或者null，
+		如果找到MethodTree类型，判断它的第一个token和上面的token是不是同一个token，是返回false，不是返回true。
+		如果是方法内部类忽略，否则找到类的注释(SyntaxToken.trivias())，看最后一个注释是不是以"/**"开头。
+				
+ClassCouplingRule判断类的聚合程度是否超过20，匿名内部类不用管。成员的类型如果是IdentifierTree类型就是一个依赖，
+		继承的类、实现的接口算一个依赖，
