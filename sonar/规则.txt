@@ -59,5 +59,16 @@ ClassCommentRule类和接口的注释，使用javadoc风格。关注类、注解
 		如果找到MethodTree类型，判断它的第一个token和上面的token是不是同一个token，是返回false，不是返回true。
 		如果是方法内部类忽略，否则找到类的注释(SyntaxToken.trivias())，看最后一个注释是不是以"/**"开头。
 				
-ClassCouplingRule判断类的聚合程度是否超过20，匿名内部类不用管。成员的类型如果是IdentifierTree类型就是一个依赖，
-		继承的类、实现的接口算一个依赖，
+ClassCouplingRule判断类的聚合程度是否超过20，匿名内部类不用管。继承的类、实现的接口、类的泛型参数都算一个依赖。
+				声明的成员变量类型、new语句的泛型参数、参数算一个依赖。类型转换要转换成的类也是一个依赖。
+				方法的泛型参数、返回值、参数，集合类型，instanceof指向的类型。
+				
+ClassNameRule类名使用UpperCamelCase风格。首尾字符不能是下划线或$，且符合正则表达式"^[A-Z][a-zA-Z0-9]*$"。
+				其实只要首字母是大写,不包含_和$就符合要求，无法界定单词边界。
+				
+ClearNumbericTypeRule明确数值类型float加f，double加d，long加L。variableTree的赋值表达式是LiteralTree（字面量）才需要判断。
+				只检查了变量声明语句variabletree。0无需后缀。
+
+ConstantNameRule检查常量命名规则，全部字母大写。符合正则表达式"^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$"。
+				如果类、接口、注解(ClassTree)的成员变量类型是八大基本类型及其包装类或者字符串，且使用static，final修饰，
+				或者成员是ENUM_CONSTANT类型，就是个常量，serialVersionUID除外。
